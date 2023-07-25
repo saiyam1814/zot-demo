@@ -1,0 +1,70 @@
+image:
+  tag: "v2.0.0-rc6"
+service:
+  type: NodePort
+  port: 5000
+ingress:
+  enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  className: "nginx"
+  pathtype: ImplementationSpecific
+  hosts:
+    - host: zot.<change to your nginx LB DNS>
+      paths:
+        - path: /
+  tls: 
+    - hosts:
+      - zot.<change to your nginx LB DNS>
+      secretName: zot-tls
+httpGet:
+  scheme: HTTP
+mountConfig: true
+configFiles:
+  config.json: |-
+    {
+      "http": {
+        "address":"0.0.0.0",
+        "port":"5000",
+        "auth":{
+        "htpasswd": {
+          "path": "/secret/htpasswd"
+        }
+        }
+      },
+      "log": {
+        "level":"debug"
+      },
+      "extensions": {
+      "search": {
+      "enable": true
+      },
+      "ui": {
+        "enable": true
+      },
+      "mgmt": {
+        "enable": true
+      }
+      },
+      "storage": {
+        "dedupe": false,
+        "rootDirectory": "/tmp/zot",
+        "storageDriver": {
+            "name": "s3",
+            "region": "lon1",
+            "regionendpoint": "https://objectstore.lon1.civo.com",
+            "bucket": "zot",
+            "secure": true,
+            "skipverify": false,
+            "accesskey": "",
+            "secretkey": ""
+        }
+      }
+    }
+mountSecret: true
+secretFiles:
+  htpasswd: |-
+    admin:$2y$05$vmiurPmJvHylk78HHFWuruFFVePlit9rZWGA/FbZfTEmNRneGJtha
+    user:$2y$05$L86zqQDfH5y445dcMlwu6uHv.oXFgT6AiJCwpv3ehr7idc0rI3S2G
+authHeader: "YWRtaW46YWRtaW4="

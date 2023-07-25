@@ -10,6 +10,10 @@ version=$(curl -s "https://api.github.com/repos/kubernetes/ingress-nginx/release
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${version}/deploy/static/provider/cloud/deploy.yaml
 ```
+## Create certificate issuer
+```
+kubectl apply -f clusterissuer.yaml
+```
 
 ## Install Zot 
 

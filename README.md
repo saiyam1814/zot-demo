@@ -1,4 +1,5 @@
 # zot-demo
+This is the repo for Zot demo showcased in [my video](https://youtu.be/zOjOF00aQSY)
 ## Create Kubernetes cluster (In demo we have used Civo Kubernetes)
 
 ## Install cert manager 
